@@ -1,7 +1,6 @@
 #include <iostream>
 #include "mpi.h"
 
-#define NTIMES 100
 int main(int argc, char **argv)
 {
     int rank;
