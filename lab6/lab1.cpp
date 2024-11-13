@@ -3,8 +3,8 @@
 #include <iomanip>
 #include "mpi.h"
 
-#define N 1000
-#define M 100
+int N = 100;
+int M = 100;
 
 double duration(auto start_time, auto end_time)
 {
@@ -46,6 +46,15 @@ int main(int argc, char **argv)
     int rank;
     int total_processes;
     const int root = 0;
+
+    if (argc > 1)
+    {
+        N = std::atoi(argv[1]);
+    }
+    if (argc > 2)
+    {
+        M = std::atoi(argv[2]);
+    }
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -93,8 +102,8 @@ int main(int argc, char **argv)
     MPI_Bcast(mat1, N * N, MPI_INT, root, MPI_COMM_WORLD);
     MPI_Bcast(mat2, N * N, MPI_INT, root, MPI_COMM_WORLD);
 
-    int counts[N];
-    int displ[N];
+    int counts[total_processes];
+    int displ[total_processes];
 
     int rows_per_process = N / total_processes;
     if (N % total_processes != 0)
@@ -104,7 +113,7 @@ int main(int argc, char **argv)
     int start_row = rows_per_process * rank;
     int end_row = std::min(rows_per_process * (rank + 1), N);
 
-    for (int i = 0; i < N; ++i)
+    for (int i = 0; i < total_processes; ++i)
     {
         int s = rows_per_process * i;
         int e = std::min(rows_per_process * (i + 1), N);
@@ -161,6 +170,8 @@ int main(int argc, char **argv)
             std::cout << "Different mat\n";
         }
     }
+
+    delete mat1, mat2, mat3, mat4;
 
     MPI_Finalize();
 }
