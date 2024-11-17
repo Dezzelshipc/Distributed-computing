@@ -86,10 +86,10 @@ int main(int argc, char **argv)
     int len = counts[rank];
     int *array_part = new int[len];
 
+    auto start_time = std::chrono::system_clock::now();
     MPI_Scatterv(array, counts, displ, MPI_INT, array_part, len, MPI_INT, root, MPI_COMM_WORLD);
 
     int max_part = -1;
-    auto start_time = std::chrono::system_clock::now();
 
     for (int i = 0; i < len; ++i)
     {
@@ -99,10 +99,8 @@ int main(int argc, char **argv)
     // print_array(array_part, len);
     // std::cout << max_part << ' ' << len << std::endl;
 
-    MPI_Barrier(MPI_COMM_WORLD);
-    auto end_time = std::chrono::system_clock::now();
-
     MPI_Reduce(&max_part, &max, 1, MPI_INT, MPI_MAX, root, MPI_COMM_WORLD);
+    auto end_time = std::chrono::system_clock::now();
 
     if (rank == root)
     {
