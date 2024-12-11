@@ -115,7 +115,7 @@ int main(int argc, char **argv)
     
     auto trim_f = [](string str) {
         auto trim_char = [](int ch){
-            return int(iscntrl(ch) || ispunct(ch));
+            return int(!isalnum(ch));
         };
         return Trim(str, trim_char);
     };
@@ -161,6 +161,12 @@ int main(int argc, char **argv)
         unordered_set<string> unique2(all_splt2.begin(), all_splt2.end());
         unique2.erase("");
         cout << "Non-Parallel: " << unique2.size() << ", " << duration(start_time, std::chrono::system_clock::now()) << " sec." << endl;
+
+        ofstream out_file("./out.txt");
+        for (auto& x : unique)
+        {
+            out_file << x << "\n";
+        }
     }
 
     MPI_Finalize();

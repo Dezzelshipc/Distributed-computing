@@ -48,20 +48,6 @@ int main(int argc, char **argv)
             array[i] = uniform(gen);
         }
         print_array(array);
-
-        auto start_time = std::chrono::system_clock::now();
-
-        int max = -1;
-
-        for (int i = 0; i < N; ++i)
-        {
-            max = std::max(max, array[i]);
-        }
-
-        auto end_time = std::chrono::system_clock::now();
-
-        std::cout << "Non-parallel max: " << duration(start_time, end_time) << " sec." << std::endl;
-        std::cout << max << std::endl;
     }
 
     int max = -1;
@@ -105,6 +91,20 @@ int main(int argc, char **argv)
     if (rank == root)
     {
         std::cout << "Parallel max: " << duration(start_time, end_time) << " sec." << std::endl;
+        std::cout << max << std::endl;
+
+        auto start_time = std::chrono::system_clock::now();
+
+        int max = -1;
+
+        for (int i = 0; i < N; ++i)
+        {
+            max = std::max(max, array[i]);
+        }
+
+        auto end_time = std::chrono::system_clock::now();
+
+        std::cout << "Non-parallel max: " << duration(start_time, end_time) << " sec." << std::endl;
         std::cout << max << std::endl;
     }
 
